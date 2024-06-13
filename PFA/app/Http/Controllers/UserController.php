@@ -5,27 +5,45 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the users.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function getUser()
     {
-        $users = User::all(); // Récupère tous les utilisateurs
-        return view('users.index', compact('users')); // Retourne une vue avec les utilisateurs
+        return response()->json(User::all(), 200);
     }
 
-    /**
-     * Store a newly created user in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    public function getUserById($id)
+    {
+        $user = User::find($id);
+        if(is_null($user)){
+            return response()->json(["message"=>"User not found"],404);
+        }
+        return response()->json(User::find($id), 200);
+    }
+
+    public function show($id)
+    {
+        $user = User::find($id);
+        if ($user) {
+            return response()->json($user, 200);
+        } else {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+    }
+
+    public function index()
+    {
+        $users = User::all();
+        return view('users.index', compact('users'));
+    }
+
+    public function addUser(Request $request)
+    {
+        $user = User::create($request->all());
+        return response($user,201);
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -41,39 +59,54 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->location = $request->location;
-        $user->specific_location = $request->specific_location; // Enregistrement de la localisation spécifique pour Sfax
+        $user->specific_location = $request->specific_location;
         $user->save();
 
         return redirect()->route('users.index')->with('success', 'User created successfully.');
     }
 
-    /**
-     * Calculate the installation rate based on user's location.
-     *
-     * @param  User  $user
-     * @return float
-     */
-    public function calculateInstallationRate(User $user)
+    public function updateUser(Request $request ,$id)
     {
-        $rate = $this->getBaseRate(); // Méthode fictive pour obtenir le taux de base
-
-        if ($user->location === 'Sfax') {
-            if ($user->specific_location === '7 Novembre' || $user->specific_location === 'Menzel Cheker') {
-                $rate /= 2;
-            }
+        $user = User::find($id);
+        if(is_null($user))
+        {
+            return response()->json(['error' => 'User not found'], 404);
         }
-
-        return $rate;
+        $user->update($request->all());
+        //return view('users.edit', compact('user'));
+        return response($user,200);
     }
 
-    /**
-     * Get the base installation rate.
-     *
-     * @return float
-     */
-    protected function getBaseRate()
+    public function update(Request $request, User $user)
     {
-        // Remplacez ceci par la logique réelle pour obtenir le taux de base
-        return 10.0;
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:8|confirmed',
+            'location' => 'required|string|in:Tunis,Sousse,Sfax',
+            'specific_location' => 'nullable|string|required_if:location,Sfax|in:7 Novembre,Menzel Cheker',
+        ]);
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        if ($request->password) {
+            $user->password = Hash::make($request->password);
+        }
+        $user->location = $request->location;
+        $user->specific_location = $request->specific_location;
+        $user->save();
+
+        return redirect()->route('users.index')->with('success', 'User updated successfully.');
+    }
+
+    public function deleteUser(User $user,$id)
+    {
+        $user = User::find($id);
+        if(is_null($user))
+        {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+        $user->delete();
+        return response(null,204);
     }
 }
