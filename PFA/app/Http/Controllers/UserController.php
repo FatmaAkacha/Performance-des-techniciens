@@ -73,7 +73,6 @@ class UserController extends Controller
             return response()->json(['error' => 'User not found'], 404);
         }
         $user->update($request->all());
-        //return view('users.edit', compact('user'));
         return response($user,200);
     }
 

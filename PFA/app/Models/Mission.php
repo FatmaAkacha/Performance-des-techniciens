@@ -16,7 +16,8 @@ class Mission extends Model
         'nombre_installation',
         'moyen',
         'type_installation',
+        'status'
     ];
+ 
 
 }
-
