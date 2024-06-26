@@ -26,7 +26,7 @@ Route::put('/updateMission/{id}', [MissionController::class, 'updateMission']);
 Route::delete('/deleteMission/{id}', [MissionController::class, 'deleteMission']);
 
 // Client routes
-Route::get('/clients', [ClientController::class, 'getClient']);
+Route::get('/clients', [ClientController::class, 'getClients']);
 Route::get('/clients/{id}', [ClientController::class, 'getClientById']);
 Route::post('/addClient', [ClientController::class, 'addClient']);
 Route::put('/updateClient/{id}', [ClientController::class, 'updateClient']);
