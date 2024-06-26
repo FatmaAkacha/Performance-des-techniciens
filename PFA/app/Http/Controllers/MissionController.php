@@ -35,6 +35,7 @@ class MissionController extends Controller
     
         $mission = new Mission();
         $mission->id_user = $request->id_user;
+        $mission->client_id = $request->client_id;
         $mission->date_debut = Carbon::parse($request->date_debut)->format('Y-m-d H:i:s');
         $mission->date_fin = Carbon::parse($request->date_fin)->format('Y-m-d H:i:s');
         $mission->nombre_installation = $request->nombre_installation;

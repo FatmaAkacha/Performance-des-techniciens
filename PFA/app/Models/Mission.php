@@ -11,6 +11,7 @@ class Mission extends Model
 
     protected $fillable = [
         'id_user',
+        'client_id',
         'date_debut',
         'date_fin',
         'nombre_installation',
