@@ -75,4 +75,8 @@ class User extends Authenticatable
             }
         });
     }
+    public function missions()
+    {
+        return $this->hasMany(Mission::class, 'id_user');
+    }
 }

@@ -33,6 +33,6 @@ class Client extends Model
 
     public function missions()
     {
-        return $this->hasMany(Mission::class);
+        return $this->hasMany(Mission::class, 'client_id');
     }
 }

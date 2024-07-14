@@ -26,3 +26,14 @@ Route::get('/admin', [AdminController::class, 'admin'])->name('admin');
 // CRUD routes for users
 Route::resource('users', UserController::class);
 Route::resource('missions', MissionController::class);
+Route::get('send-mail', function () {
+   
+    $details = [
+        'title' =>' Mail from Fatma' ,
+        'body' => 'This is for testing email '
+    ];
+   
+    \Mail::to('akachafatma1@gmail.com')->send(new \App\Mail\MyTestMail($details));
+   
+    dd("Email is Sent.");
+});

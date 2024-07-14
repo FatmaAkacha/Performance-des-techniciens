@@ -19,6 +19,14 @@ class Mission extends Model
         'type_installation',
         'status'
     ];
- 
+    public function client()
+    {
+        return $this->belongsTo(Client::class, 'client_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user');
+    }
 
 }

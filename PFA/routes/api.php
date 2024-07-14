@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MissionController;
 use App\Http\Controllers\ClientController;
-
+use App\Http\Controllers\EmailController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -32,3 +32,5 @@ Route::post('/addClient', [ClientController::class, 'addClient']);
 Route::put('/updateClient/{id}', [ClientController::class, 'updateClient']);
 Route::delete('/deleteClient/{id}', [ClientController::class, 'deleteClient']);
 
+
+Route::post('/sendemail', [ContactController::class, 'send']);
