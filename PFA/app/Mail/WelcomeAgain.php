@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
@@ -11,14 +10,18 @@ class WelcomeAgain extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $subject;
+    public $message;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($subject, $message)
     {
-        //
+        $this->subject = $subject;
+        $this->message = $message;
     }
 
     /**
@@ -28,6 +31,8 @@ class WelcomeAgain extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.welcome');
+        return $this->subject($this->subject)
+                    ->markdown('emails.welcome')
+                    ->with('message', $this->message);
     }
 }
