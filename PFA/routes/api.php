@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\MissionController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\EmailController;
+use App\Http\Controllers\ContactController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
